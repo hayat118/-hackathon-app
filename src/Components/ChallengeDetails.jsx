@@ -3,8 +3,6 @@ import Header from "./Header";
 import { useParams, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-// import ChallengesData from "../data/challenges.json";
-
 const ChallengeDetails = () => {
   const now = new Date();
   const navigate = useNavigate();
