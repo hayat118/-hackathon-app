@@ -21,7 +21,9 @@ const Explore = () => {
   const navigate = useNavigate();
   const challengeData = localStorage.getItem("challenge");
 
-  const [challenges, setChallenges] = useState(JSON.parse(challengeData || []));
+  const [challenges, setChallenges] = useState(
+    JSON.parse(challengeData || "[]")
+  );
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({ status: "all", level: "all" });
 
