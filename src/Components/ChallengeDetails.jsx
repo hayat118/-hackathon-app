@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 // import ChallengesData from "../data/challenges.json";
 
 const ChallengeDetails = () => {
+  const now = new Date();
   const navigate = useNavigate();
   const { id } = useParams();
   const challengeData = JSON.parse(localStorage.getItem("challenge") || []);
@@ -13,6 +14,14 @@ const ChallengeDetails = () => {
   const challenge = challengeData.find(
     (challenge) => challenge.id === parseInt(id)
   );
+
+  const status =
+    new Date(challenge.startDate) > now
+      ? "Upcoming"
+      : new Date(challenge.startDate) <= now &&
+        new Date(challenge.endDate) > now
+      ? "Active"
+      : "Past";
 
   // Handle delete
   const handleDelete = () => {
@@ -41,7 +50,7 @@ const ChallengeDetails = () => {
           <h2>{challenge.name}</h2>
           <p>{challenge.discription}</p>
           <div>
-            <span>{challenge.status}</span>
+            <span>{status}</span>
           </div>
         </div>
       </section>
