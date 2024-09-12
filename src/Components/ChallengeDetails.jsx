@@ -7,7 +7,7 @@ const ChallengeDetails = () => {
   const now = new Date();
   const navigate = useNavigate();
   const { id } = useParams();
-  const challengeData = JSON.parse(localStorage.getItem("challenge") || []);
+  const challengeData = JSON.parse(localStorage.getItem("challenge") || "[]");
 
   const challenge = challengeData.find(
     (challenge) => challenge.id === parseInt(id)

@@ -12,7 +12,7 @@ const EditPage = () => {
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
   //
-  const challengeData = JSON.parse(localStorage.getItem("challenge") || []);
+  const challengeData = JSON.parse(localStorage.getItem("challenge") || "[]");
   //
   const { id } = useParams();
   const challenge = challengeData.find(
