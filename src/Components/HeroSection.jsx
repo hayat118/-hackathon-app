@@ -26,7 +26,7 @@ function HeroSection() {
             competitions.
           </p>
           <button className=" create-btn" onClick={handleChallenges}>
-            create challenges
+            Create Challenge
           </button>
         </div>
         <div>
