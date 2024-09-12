@@ -3,6 +3,8 @@ import Search from "./Search";
 import Filter from "./Filter";
 import { useNavigate } from "react-router-dom";
 
+import ChallengeData from "../data/challenges.json";
+
 const calculateTimeLeft = (startDate) => {
   const now = new Date();
   const timeDifference = new Date(startDate) - now;
@@ -22,7 +24,7 @@ const Explore = () => {
   const challengeData = localStorage.getItem("challenge");
 
   const [challenges, setChallenges] = useState(
-    JSON.parse(challengeData || "[]")
+    challengeData ? JSON.parse(challengeData || "[]") : ChallengeData
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({ status: "all", level: "all" });
