@@ -244,7 +244,9 @@ body {
   flex-wrap: wrap;
 }
 .participate-box {
-  flex: 1 1 calc(50% -20px);
+  flex-grow: 1;
+  flex-shrink: 1;
+  /* flex: 1 1 calc(50% - 20px); */
   background-color: #f8f9fd;
   width: 400px;
   border-radius: 10px;
