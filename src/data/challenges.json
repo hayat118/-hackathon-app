@@ -21,8 +21,8 @@
     "id": 3,
     "name": "Data Sprint 71 - Weather Recognition",
     "status": "active",
-    "startDate": "2024-11-01",
-    "endDate": "2024-11-01",
+    "startDate": "2024-09-12",
+    "endDate": "2024-09-14",
     "image": "/assets/cardimage/Group 1000002767.png",
     "description": "Identify the class to which each butterfly belongs to"
   },
@@ -30,8 +30,8 @@
     "id": 4,
     "name": "Data Sprint 70-Airline Passenger Satisfaction",
     "status": "active",
-    "startDate": "2024-11-01",
-    "endDate": "2024-11-01",
+    "startDate": "2024-09-08",
+    "endDate": "2024-09-16",
     "image": "/assets/cardimage/Group 1000002772.png",
     "description": "Identify the class to which each butterfly belongs to"
   },
@@ -39,8 +39,8 @@
     "id": 5,
     "name": "Engineering Graduates Employment Outcomes",
     "status": "past",
-    "startDate": "2024-06-08",
-    "endDate": "2024-07-08",
+    "startDate": "2024-09-08",
+    "endDate": "2024-09-07",
     "image": "/assets/cardimage/Group 1000002773.png",
     "description": "Identify the class to which each butterfly belongs to"
   },
@@ -48,8 +48,8 @@
     "id": 6,
     "name": "Travel Insurance Claim Prediction",
     "status": "past",
-    "startDate": "2024-09-09",
-    "endDate": "2024-08-09",
+    "startDate": "2024-10-09",
+    "endDate": "2024-11-09",
     "image": "/assets/cardimage/Group 1000002466.png",
     "description": "Identify the class to which each butterfly belongs to"
   }

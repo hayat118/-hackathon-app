@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
-// import ChallengesData from "../data/challenges.json";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import axios from "axios";
+import "react-datepicker/dist/react-datepicker.css";
+
+const CLOUD_NAME = process.env.REACT_APP_CLOUD_NAME;
 
 const EditPage = () => {
+  const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
+  //
   const challengeData = JSON.parse(localStorage.getItem("challenge") || []);
+  //
   const { id } = useParams();
   const challenge = challengeData.find(
     (challenge) => challenge.id === parseInt(id)
@@ -21,7 +28,7 @@ const EditPage = () => {
     level: challenge.lavel,
   });
 
-  //   Populate form data on component mount
+  //   Populate form data
   useEffect(() => {
     if (challenge) {
       setFormData({
@@ -35,19 +42,69 @@ const EditPage = () => {
     }
   }, []);
 
-  // Handle input change
+  // Handle start date change
+  const handleStartDateChange = (date) => {
+    setFormData({ ...formData, startDate: date });
+  };
+
+  // Handle end date change
+  const handleEndDateChange = (date) => {
+    setFormData({ ...formData, endDate: date });
+  };
+
+  const uploadFile = (e) => {
+    setUploading(true);
+    const file = e.target.files[0];
+    const fileFormData = new FormData();
+    fileFormData.append("file", file);
+    fileFormData.append("upload_preset", "preset_1");
+
+    axios
+      .post(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        fileFormData
+      )
+      .then((response) => {
+        setFormData({
+          ...formData,
+          image: response.data.secure_url,
+        });
+      })
+      .catch((error) => {
+        console.error("Error uploading image:", error);
+      })
+      .finally(() => {
+        setUploading(false);
+      });
+  };
+
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value,
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   // Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    // setFormData(challenge);
+
+    const updatedChallenges = challengeData.map((uc) =>
+      uc.id === parseInt(id)
+        ? {
+            ...uc,
+            name: formData.name,
+            startDate: formData.startDate,
+            endDate: formData.endDate,
+            description: formData.description,
+            image: formData.image,
+            level: formData.level,
+          }
+        : uc
+    );
+    // Save the updated challenge
+    localStorage.setItem("challenge", JSON.stringify(updatedChallenges));
+    //
+
+    navigate(`/view/${id}`);
 
     console.log("Updated Challenge Data: ", formData);
   };
@@ -63,7 +120,7 @@ const EditPage = () => {
       </div>
 
       <div>
-        <form onSubmit={handleSubmit} className="challenge-form">
+        <form onSubmit={handleSubmit} className="challenge-form name">
           <label htmlFor="name">Challenge Name:</label>
           <input
             className="input name"
@@ -77,14 +134,13 @@ const EditPage = () => {
 
           <div className="date-wrapper">
             <label htmlFor="startDate">Start Date:</label>
-            <input
+
+            <DatePicker
+              selected={formData.startDate}
+              onChange={handleStartDateChange}
+              placeholderText="Add start date"
+              dateFormat="dd/MM/yyyy"
               className="input name"
-              //   type="date"
-              id="startDate"
-              name="startDate"
-              value={formData.startDate}
-              onChange={handleChange}
-              required
             />
             <img
               className="date-img"
@@ -95,14 +151,13 @@ const EditPage = () => {
 
           <div className="date-wrapper">
             <label htmlFor="endDate">End Date:</label>
-            <input
+
+            <DatePicker
+              selected={formData.endDate}
+              onChange={handleEndDateChange}
+              placeholderText="Add start date"
+              dateFormat="dd/MM/yyyy"
               className="input name"
-              //   type="date"
-              id="endDate"
-              name="endDate"
-              value={formData.endDate}
-              onChange={handleChange}
-              required
             />
             <img
               className="date-img"
@@ -123,19 +178,27 @@ const EditPage = () => {
 
           <div className="upload-wrapper">
             <label htmlFor="image">Image:</label>
+
             <input
-              className="input align"
-              //   type="file"
+              className="input align file-input"
+              type="file"
               id="image"
               name="image"
-              onChange={handleChange}
+              onChange={uploadFile}
               accept="image/*"
+              //   required
+              placeholder="Upload"
             />
+            <label for="image" class="custom-file-upload">
+              Upload
+            </label>
             <img
               className="upload-img"
               src="/assets/icons/bxs_cloud-upload.svg"
               alt="upload"
             />
+            {uploading ? "Uploading..." : ""}
+            {formData.image ? `Selected Image: ${formData.image}` : ""}
           </div>
 
           <label htmlFor="level">Level:</label>

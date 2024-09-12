@@ -17,6 +17,7 @@ const calculateTimeLeft = (startDate) => {
 };
 
 const Explore = () => {
+  const now = new Date();
   const navigate = useNavigate();
   const challengeData = localStorage.getItem("challenge");
 
@@ -63,8 +64,16 @@ const Explore = () => {
         {filteredChallenges.length > 0 ? (
           <div className="explore-sec-2 ">
             {filteredChallenges.map((challenge) => {
+              const status =
+                new Date(challenge.startDate) > now
+                  ? "Upcoming"
+                  : new Date(challenge.startDate) <= now &&
+                    new Date(challenge.endDate) > now
+                  ? "Active"
+                  : "Past";
+
               const { days, hours, minutes } = calculateTimeLeft(
-                challenge.startDate
+                status === "Active" ? challenge.endDate : challenge.startDate
               );
 
               return (
@@ -73,20 +82,44 @@ const Explore = () => {
                     <img src={challenge.image} alt={challenge.name} />
                   </div>
                   <div className="card">
-                    <span>{challenge.status}</span>
-                    <h3>{challenge.name}</h3>
-                    <span>
-                      {challenge.status === "upcoming"
-                        ? "Starts in"
-                        : challenge.status === "active"
-                        ? "Ends in"
-                        : "Ended on"}
+                    <span
+                      className="status"
+                      style={{
+                        backgroundColor:
+                          status === "Upcoming"
+                            ? "#F2C94C40"
+                            : status === "Past"
+                            ? "#FF3C002B"
+                            : status === "Active"
+                            ? "#44924C3D"
+                            : "transparent",
+                      }}
+                    >
+                      {status}
                     </span>
-                    <div className="timer">
-                      <p>Days: {days}</p>
-                      <p>Hours: {hours}</p>
-                      <p>Mins: {minutes}</p>
+                    <h3>{challenge.name}</h3>
+                    <div className="timer-box">
+                      <div>
+                        <span>
+                          {status === "Upcoming"
+                            ? "Starts in"
+                            : status === "Active"
+                            ? "Ends in"
+                            : "Ended on"}
+                        </span>
+                      </div>
+                      <div className="flex timer">
+                        <p>{days} </p>
+                        <p>{hours} </p>
+                        <p>{minutes}</p>
+                      </div>
+                      <div className="flex timer-1">
+                        <p>Days</p>
+                        <p>Hours</p>
+                        <p>Mins</p>
+                      </div>
                     </div>
+
                     <button
                       className="btn"
                       onClick={(e) => handleParticipate(challenge.id, e)}

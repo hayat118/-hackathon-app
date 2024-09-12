@@ -1,20 +1,29 @@
 import React from "react";
 import Header from "./Header";
 import { useParams, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // import ChallengesData from "../data/challenges.json";
 
 const ChallengeDetails = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const challengeData = JSON.parse(localStorage.getItem("challenge") || []);
 
   const challenge = challengeData.find(
     (challenge) => challenge.id === parseInt(id)
   );
-  //
-  // if (!challenge) {
-  //   return <div>Challenge not found</div>;
-  // }
+
+  // Handle delete
+  const handleDelete = () => {
+    const updatedChallenges = challengeData.filter(
+      (uc) => uc.id !== parseInt(id)
+    );
+
+    localStorage.setItem("challenge", JSON.stringify(updatedChallenges));
+
+    navigate("/");
+  };
   //
   return (
     <>
@@ -26,13 +35,12 @@ const ChallengeDetails = () => {
       <section className="detail-hero-sec">
         <div>
           <time>
-            {challenge.startDate}
+            {challenge.startDate || challenge.endDate}
             (India Standard Time)
           </time>
           <h2>{challenge.name}</h2>
           <p>{challenge.discription}</p>
           <div>
-            <img />
             <span>{challenge.status}</span>
           </div>
         </div>
@@ -40,12 +48,15 @@ const ChallengeDetails = () => {
       <section className="overview ">
         <div>
           <h3>Overview</h3>
+          <hr className="overview-hr" />
         </div>
         <div>
           <Link to={`/edit/${challenge.id}`}>
             <button className="edit">Edit</button>
           </Link>
-          <button className="delete">Delete</button>
+          <button className="delete" onClick={handleDelete}>
+            Delete
+          </button>
         </div>
       </section>
       <section className="details-para">
